@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Flight Recommendations</h1>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% else %}
+            <h2>Top 5 Flights</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Airline</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flight in flights %}
+                        <tr>
+                            <td>{{ flight.FlightName }}</td>
+                            <td>{{ flight.DepartingCity }}</td>
+                            <td>{{ flight.ArrivingCity }}</td>
+                            <td>{{ flight.Price }}</td>
+                            <td>{{ flight.Duration }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h2>Ollama's Recommendation</h2>
+            <pre>{{ recommendation }}</pre>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}">Back to Search</a>
+    </div>
+</body>
+</html>
