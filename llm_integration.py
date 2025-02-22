@@ -17,7 +17,7 @@ def get_best_flight_recommendation(flights):
         f"Here are the top 5 flights from {flights.iloc[0]['DepartingCity']} to {flights.iloc[0]['ArrivingCity']}:\n"
         f"{flights.to_string()}\n"
         "Please compare these flights and recommend the best one based on price, duration, and airline. "
-        "Return your response as a JSON object with 'flight_id', 'reason', and 'recommendation'."
+        "Return your response as a JSON object with 'flight_id', 'price','reason', and 'recommendation'."
     )
 
     # Step 2: Send the prompt to Ollama

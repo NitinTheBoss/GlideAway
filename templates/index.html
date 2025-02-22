@@ -19,6 +19,26 @@
             <label for="date">Departure Date:</label>
             <input type="date" id="date" name="date" required>
 
+            <!-- Toggle Switch for Cheapest Flight -->
+            <div class="toggle-switch">
+                <label for="cheapest_toggle">Cheapest Flight:</label>
+                <label class="switch">
+                    <input type="checkbox" id="cheapest_toggle" name="cheapest_toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <!-- New Direct Flight toggle -->
+            <div class="toggle-switch">
+                <label for="direct_toggle">Direct Flight:</label>
+<!--                <input type="checkbox" id="direct_toggle" name="direct_toggle" checked>-->
+<!--                <label class="switch" for="direct_toggle">-->
+<!--                    <span class="slider round"></span>-->
+<!--                </label>-->
+                <label class="switch">
+                    <input type="checkbox" id="direct_toggle" name="direct_toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
             <button type="submit">Find Flights</button>
         </form>
     </div>

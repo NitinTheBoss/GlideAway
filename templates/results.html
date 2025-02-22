@@ -9,7 +9,15 @@
 <body>
     <div class="container">
         <h1>Flight Recommendations</h1>
-
+        <!-- Add this below the <h1> tag -->
+        {% if cheapest_toggle == "on" %}
+            <p class="toggle-note">Showing the cheapest flights (toggle was ON)</p>
+        {% else %}
+            <p class="toggle-note">Showing flights sorted by duration (toggle was OFF)</p>
+        {% endif %}
+        {% if direct_toggle == "on" %}
+            <p>• Showing only direct flights</p>
+        {% endif %}
         {% if error %}
             <p class="error">{{ error }}</p>
         {% else %}
