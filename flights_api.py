@@ -4,7 +4,7 @@ import pandas as pd
 app = FastAPI()
 
 # Load dataset
-DATA_PATH = "flight_data_BOM_BLR.csv"  # Ensure this path matches your file location
+DATA_PATH = "Dataset/flight_data_BOM_BLR.csv"  # Ensure this path matches your file location
 df = pd.read_csv(DATA_PATH)
 
 # Standardize column names (just in case)
