@@ -3,6 +3,7 @@ from input_handler import get_user_input
 from data_loader import load_dataset
 from data_processor import filter_flights
 from llm_integration import get_best_flight_recommendation
+from data_processor_amadeus import filter_flights_amadeus
 
 app = Flask(__name__)
 
@@ -20,9 +21,11 @@ def index():
         direct_toggle = request.form.get("direct_toggle", "off")  # New toggle
 
         # Filter flights and get the top 5
-        filtered_flights = filter_flights(dataset, source, destination, date, cheapest_toggle, direct_toggle)
+        # filtered_flights = filter_flights(dataset, source, destination, date, cheapest_toggle, direct_toggle)
 
-        if filtered_flights.empty:
+        filtered_flights = filter_flights_amadeus(dataset, source, destination, date, cheapest_toggle, direct_toggle)
+
+        if not filtered_flights:
             return render_template("results.html", error="No flights found for the given input.")
 
         # Get Ollama's recommendation
