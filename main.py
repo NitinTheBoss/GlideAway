@@ -19,7 +19,7 @@ def main():
         return
 
     # Step 4: Get best flight recommendation
-    recommendation = get_best_flight_recommendation(filtered_flights)
+    recommendation = get_best_flight_recommendation(filtered_flights, cheapest_toggle=True, direct_toggle=True)
 
 if __name__ == "__main__":
     main()

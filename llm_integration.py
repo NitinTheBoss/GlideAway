@@ -8,17 +8,31 @@ def setup_ollama():
     ollama_endpoint = "http://localhost:11434/api/generate"
     return ollama_endpoint
 
-def get_best_flight_recommendation(flights):
+def get_best_flight_recommendation(flights, cheapest_toggle, direct_toggle):
     """
     Compare the top 5 flights and get the best recommendation from Ollama.
     """
     # Step 1: Prepare the prompt for Ollama
     prompt = (
-        f"Here are the top 5 flights from {flights.iloc[0]['DepartingCity']} to {flights.iloc[0]['ArrivingCity']}:\n"
+        f"Here are the flights from {flights.iloc[0]['departure_airport']} to "
+        f"{flights.iloc[0]['arrival_airport']}:\n"
         f"{flights.to_string()}\n"
-        "Please compare these flights and recommend the best one based on price, duration, and airline. "
-        "Return your response as a JSON object with 'flight_id', 'price','reason', and 'recommendation'."
+        "Select the best flight. "
     )
+
+    if direct_toggle:
+        prompt = prompt + "Prefer direct flights. "
+    if cheapest_toggle:
+        prompt = prompt + "Prefer cheapest flights options. "
+
+    prompt = prompt + ("Give me the recommendation with "
+                        "'Flight ID:'"
+                        "'Price:'"
+                        "'Airline'"
+                        "'Departure Time:'"
+                        "'Duration:'"
+                        "'Reason:'"
+                       )
 
     # Step 2: Send the prompt to Ollama
     ollama_endpoint = setup_ollama()

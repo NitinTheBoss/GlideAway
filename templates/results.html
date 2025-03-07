@@ -25,21 +25,28 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Flight Id</th>
                         <th>Airline</th>
-                        <th>Source</th>
+                        <th>Origin</th>
                         <th>Destination</th>
                         <th>Price</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
                         <th>Duration</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     {% for flight in flights %}
                         <tr>
-                            <td>{{ flight.FlightName }}</td>
-                            <td>{{ flight.DepartingCity }}</td>
-                            <td>{{ flight.ArrivingCity }}</td>
-                            <td>{{ flight.Price }}</td>
-                            <td>{{ flight.Duration }}</td>
+                            <td>{{ flight.flight_id }}</td>
+                            <td>{{ flight.airline }}</td>
+                            <td>{{ flight.departure_airport }}</td>
+                            <td>{{ flight.arrival_airport }}</td>
+                            <td>{{ flight.price }}</td>
+                            <td>{{ flight.departure_time }}</td>
+                            <td>{{ flight.arrival_time }}</td>
+                            <td>{{ flight.duration }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -25,11 +25,11 @@ def index():
 
         filtered_flights = filter_flights_amadeus(dataset, source, destination, date, cheapest_toggle, direct_toggle)
 
-        if not filtered_flights:
+        if filtered_flights.empty:
             return render_template("results.html", error="No flights found for the given input.")
 
         # Get Ollama's recommendation
-        recommendation = get_best_flight_recommendation(filtered_flights)
+        recommendation = get_best_flight_recommendation(filtered_flights, cheapest_toggle, direct_toggle)
 
         # Render the results page
         return render_template(
@@ -43,5 +43,5 @@ def index():
     # Render the homepage with the input form
     return render_template("index.html")
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=False)

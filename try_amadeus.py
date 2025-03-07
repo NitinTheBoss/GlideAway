@@ -1,4 +1,6 @@
 import requests
+import pandas as pd
+from llm_integration import get_best_flight_recommendation
 
 # Your API credentials
 API_KEY = "Replace_from_whatsapp"
@@ -27,55 +29,74 @@ def get_access_token():
 
 
 # Function to search flights
-def search_flights(access_token, origin, destination, date, max_price=500):
+def search_flights(access_token, origin, destination, date):
     headers = {"Authorization": f"Bearer {access_token}"}
     search_params = {
         "originLocationCode": origin,
         "destinationLocationCode": destination,
         "departureDate": date,
         "adults": 1,
-        "currencyCode": "USD",
-        "maxPrice": max_price  # Filters flights less than $200
+        "currencyCode": "INR",
     }
 
     response = requests.get(FLIGHT_SEARCH_URL, headers=headers, params=search_params)
 
     if response.status_code == 200:
-        return response.json().get("data", [])
+        flights = response.json().get("data", [])
+
+        # Filter flights to only include direct ones from origin to destination
+        filtered_flights = []
+        for flight in flights:
+            for itinerary in flight["itineraries"]:
+                segments = itinerary["segments"]
+
+                # Ensure single-segment flights that match origin and destination
+                if len(segments) == 1 and segments[0]["departure"]["iataCode"] == origin and segments[0]["arrival"]["iataCode"] == destination:
+                    filtered_flights.append({
+                        "flight_id": flight["id"],
+                        "airline": segments[0]["carrierCode"],
+                        "departure_airport": segments[0]["departure"]["iataCode"],
+                        "arrival_airport": segments[0]["arrival"]["iataCode"],
+                        "departure_time": segments[0]["departure"]["at"],
+                        "arrival_time": segments[0]["arrival"]["at"],
+                        "price": float(flight["price"]["total"]),  # Convert price to float for sorting
+                        "duration": itinerary["duration"]
+                    })
+
+        # Convert list to Pandas DataFrame before returning
+        return pd.DataFrame(filtered_flights)
+
     else:
         print("Error:", response.status_code, response.text)
-        return []
+        return pd.DataFrame()  # Return an empty DataFrame if API call fails
 
 
-# Function to format and display flight details
-def print_flight_details(flights):
-    if not flights:
-        print("No flights found under $200.")
+def print_flight_details(flights, origin, destination):
+    if flights.empty:
+        print(f"No direct flights found from {origin} to {destination}.")
         return
 
-    print("\nAvailable Flights (Under $200):\n" + "-" * 50)
-    for flight in flights:
-        price = flight["price"]["total"]
-        itinerary = flight["itineraries"][0]["segments"][0]  # First segment
+    print(f"\nAvailable Flights ({origin} to {destination}):\n" + "-" * 50)
 
-        airline = itinerary["carrierCode"]
-        departure_airport = itinerary["departure"]["iataCode"]
-        arrival_airport = itinerary["arrival"]["iataCode"]
-        departure_time = itinerary["departure"]["at"]
-        arrival_time = itinerary["arrival"]["at"]
-
-        print(f"Airline: {airline}")
-        print(f"From: {departure_airport} -> {arrival_airport}")
-        print(f"Departure: {departure_time}")
-        print(f"Arrival: {arrival_time}")
-        print(f"Price: ${price}")
+    for _, flight in flights.iterrows():  # Iterate through DataFrame rows
+        print(f"Airline: {flight['airline']}")
+        print(f"From: {flight['departure_airport']} -> {flight['arrival_airport']}")
+        print(f"Departure: {flight['departure_time']}")
+        print(f"Arrival: {flight['arrival_time']}")
+        print(f"Price: ₹{flight['price']}")
         print("-" * 50)
 
 
 # Main execution
 if __name__ == "__main__":
+    origin = "MAA"  # Changeable variable for origin
+    destination = "BOM"  # Changeable variable for destination
+    departure_date = "2025-03-10"  # Changeable departure date
+
     access_token = get_access_token()
 
     if access_token:
-        flights = search_flights(access_token, "JFK", "LHR", "2025-03-10")
-        print_flight_details(flights)
+        flights = search_flights(access_token, origin, destination, departure_date)
+        print_flight_details(flights, origin, destination)
+        recommendation = get_best_flight_recommendation(flights, cheapest_toggle=True, direct_toggle=True)
+        print(recommendation)
