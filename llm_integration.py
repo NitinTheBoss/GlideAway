@@ -1,8 +1,9 @@
-import base64
 import os
 from google import genai
 from google.genai import types
 
+# Load API keys from environment variables
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def setup_gemini(api_key=None):
     """
@@ -11,13 +12,15 @@ def setup_gemini(api_key=None):
     Args:
         api_key: Optional explicit API key. If None, will try to get from environment.
     """
-    # Initialize the client with the API key
+    api_key = api_key or GEMINI_API_KEY
+    if not api_key:
+        raise ValueError("Missing GEMINI_API_KEY. Set it as an environment variable.")
+
     client = genai.Client(api_key=api_key)
     return client
 
 
-def get_best_flight_recommendation(flights, cheapest_toggle, direct_toggle,
-                                   api_key='Insert from Whatsapp'):
+def get_best_flight_recommendation(flights, cheapest_toggle, direct_toggle, api_key=None):
     """
     Compare the top 5 flights and get the best recommendation from Gemini.
 
@@ -27,7 +30,6 @@ def get_best_flight_recommendation(flights, cheapest_toggle, direct_toggle,
         direct_toggle: Boolean indicating preference for direct flights
         api_key: Optional Gemini API key
     """
-    # Step 1: Prepare the prompt for Gemini
     prompt = (
         f"Here are the flights from {flights.iloc[0]['departure_airport']} to "
         f"{flights.iloc[0]['arrival_airport']}:\n"
@@ -41,13 +43,12 @@ def get_best_flight_recommendation(flights, cheapest_toggle, direct_toggle,
     prompt += ("Give me the recommendation with "
                "'Flight ID:'"
                "'Price:'"
-               "'Airline'"
+               "'Airline' "
                "'Departure Time:'"
                "'Duration:'"
                "'Reason:'"
                )
 
-    # Step 2: Send the prompt to Gemini
     try:
         client = setup_gemini(api_key)
         model = "gemini-2.0-flash"
@@ -69,7 +70,6 @@ def get_best_flight_recommendation(flights, cheapest_toggle, direct_toggle,
             response_mime_type="text/plain",
         )
 
-        # Step 3: Get the response
         response = client.models.generate_content(
             model=model,
             contents=contents,

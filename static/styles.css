@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #dbeeff; /* Light Sky Blue */
     margin: 0;
     padding: 0;
 }
@@ -8,19 +8,26 @@ body {
 .container {
     width: 80%;
     margin: 50px auto;
-    background: #fff;
+    background: #dbeeff; /* #f0f8ff; /* Light Sky Blue */
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #005eb8; /* Skyscanner Blue */
 }
 
 form {
     display: flex;
     flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
 label {
@@ -34,20 +41,41 @@ input, button {
     border-radius: 5px;
 }
 
-button {
-    background-color: #28a745;
-    color: white;
+/* Disabled return date style */
+.disabled-date {
+    background-color: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Enabled return date style */
+.enabled-date {
+    background-color: white;
+    color: black;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #218838;
+/* Updated Button Styles */
+button {
+    background-color: #0077cc; /* Deep Sky Blue */
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    transition: background 0.3s;
 }
 
+button:hover {
+    background-color: #005eb8; /* Darker Blue */
+}
+
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 th, td {
@@ -57,7 +85,8 @@ th, td {
 }
 
 th {
-    background-color: #f8f9fa;
+    background-color: #005eb8;
+    color: white;
 }
 
 .error {
@@ -117,9 +146,25 @@ pre {
 }
 
 input:checked + .slider {
-    background-color: #28a745;
+    background-color: #0077cc;
 }
 
 input:checked + .slider:before {
     transform: translateX(26px);
+}
+
+/* Logo Styling */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 150px;
+    height: auto;
+}
+
+/* Date Picker Styling */
+input[type="date"] {
+    cursor: pointer;
 }

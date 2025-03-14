@@ -3,44 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Recommendation System</title>
+    <title>Glide Away</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Flight Recommendation System</h1>
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Flight Logo">
+        </div>
+
+        <h1>Your AI Flight Assistant</h1>
         <form method="POST">
-            <label for="source">Source City:</label>
-            <input type="text" id="source" name="source" required>
-
-            <label for="destination">Destination City:</label>
-            <input type="text" id="destination" name="destination" required>
-
-            <label for="date">Departure Date:</label>
-            <input type="date" id="date" name="date" required>
-
-            <!-- Toggle Switch for Cheapest Flight -->
-            <div class="toggle-switch">
-                <label for="cheapest_toggle">Cheapest Flight:</label>
-                <label class="switch">
-                    <input type="checkbox" id="cheapest_toggle" name="cheapest_toggle" checked>
-                    <span class="slider round"></span>
-                </label>
+            <!-- Source and Destination Closer Together -->
+            <div class="form-row" style="display: flex; justify-content: center; gap: 50px;">
+                <div>
+                    <label for="source">Source:</label>
+                    <input type="text" id="source" name="source" required>
+                </div>
+                <div>
+                    <label for="destination">Destination:</label>
+                    <input type="text" id="destination" name="destination" required>
+                </div>
             </div>
-            <!-- New Direct Flight toggle -->
-            <div class="toggle-switch">
-                <label for="direct_toggle">Direct Flight:</label>
-<!--                <input type="checkbox" id="direct_toggle" name="direct_toggle" checked>-->
-<!--                <label class="switch" for="direct_toggle">-->
-<!--                    <span class="slider round"></span>-->
-<!--                </label>-->
-                <label class="switch">
-                    <input type="checkbox" id="direct_toggle" name="direct_toggle" checked>
-                    <span class="slider round"></span>
-                </label>
+
+            <!-- Departure and Return Date Closer Together -->
+            <div class="form-row" style="display: flex; justify-content: center; gap: 50px;">
+                <div>
+                    <label for="date">Departure Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div>
+                    <label for="return_date">Return Date:</label>
+                    <input type="date" id="return_date" name="return_date" disabled style="background-color: #e0e0e0; color: #888;">
+                </div>
             </div>
+
+            <!-- Cheapest Flight Toggle -->
+            <div class="toggle-switch" style="display: flex; justify-content: center; gap: 50px;">
+                <div>
+                    <label for="cheapest_toggle">Cheapest Flight:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="cheapest_toggle" name="cheapest_toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div>
+                    <label for="direct_toggle">Direct Flight:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="direct_toggle" name="direct_toggle" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
             <button type="submit">Find Flights</button>
         </form>
     </div>
+
+    <script>
+        // Enable return date when clicked
+        document.getElementById("return_date").addEventListener("focus", function() {
+            this.removeAttribute("disabled");
+            this.style.backgroundColor = "white";
+            this.style.color = "black";
+            this.style.cursor = "pointer";
+        });
+
+        // Make date input clickable everywhere to open calendar
+        document.querySelectorAll("input[type='date']").forEach(dateInput => {
+            dateInput.addEventListener("click", function() {
+                this.showPicker();
+            });
+        });
+    </script>
 </body>
 </html>
